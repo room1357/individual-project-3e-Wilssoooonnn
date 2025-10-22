@@ -1,115 +1,195 @@
 import 'package:flutter/material.dart';
-import 'package:pemrograman_mobile/screens/login_screen.dart';
+import 'package:heroicons/heroicons.dart';
+import 'package:pemrograman_mobile/services/user_service.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _emailController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  void _handleRegister() async {
+    final String fullName = _fullNameController.text;
+    final String email = _emailController.text;
+    final String username = _usernameController.text;
+    final String password = _passwordController.text;
+    final String confirmPassword = _confirmPasswordController.text;
+
+    if (fullName.isEmpty ||
+        email.isEmpty ||
+        username.isEmpty ||
+        password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Semua field harus diisi!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password dan Konfirmasi Password tidak cocok!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    bool isRegisterSuccess = await UserService.register(username, password);
+
+    if (!mounted) return;
+
+    if (isRegisterSuccess) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Registrasi berhasil! Silakan login.'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Username "$username" sudah digunakan!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Register'), backgroundColor: Colors.blue),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Register'),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+      ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Logo
             Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
+              child: const HeroIcon(
+                HeroIcons.userPlus,
+                size: 160,
                 color: Colors.blue,
-                shape: BoxShape.circle,
               ),
-              child: Icon(Icons.person_add, size: 50, color: Colors.white),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
 
             // Full Name Field
             TextField(
-              decoration: InputDecoration(
+              controller: _fullNameController,
+              decoration: const InputDecoration(
                 labelText: 'Full Name',
                 border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.person),
+                prefixIcon: HeroIcon(HeroIcons.user),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Email Field
             TextField(
-              decoration: InputDecoration(
+              controller: _emailController,
+              decoration: const InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
+                prefixIcon: HeroIcon(HeroIcons.envelope),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Username Field
             TextField(
-              decoration: InputDecoration(
+              controller: _usernameController,
+              decoration: const InputDecoration(
                 labelText: 'Username',
                 border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.account_circle),
+                prefixIcon: HeroIcon(HeroIcons.user),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Password Field
             TextField(
+              controller: _passwordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock),
+                prefixIcon: HeroIcon(HeroIcons.lockClosed),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Confirm Password Field
             TextField(
+              controller: _confirmPasswordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Confirm Password',
                 border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock_outline),
+                prefixIcon: HeroIcon(HeroIcons.lockClosed),
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // Register Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // Handle register
-                },
+                onPressed: _handleRegister,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: Text(
+                child: const Text(
                   'REGISTER',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Login Link
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Already have an account? "),
+                const Text("Already have an account? "),
                 TextButton(
                   onPressed: () {
-                    // Navigate to login
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
-                    );
+                    Navigator.pop(context);
                   },
-                  child: Text('Login'),
+                  child: const Text('Login'),
                 ),
               ],
             ),
