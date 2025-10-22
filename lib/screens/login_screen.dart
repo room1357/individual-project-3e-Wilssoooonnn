@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:pemrograman_mobile/screens/register_screen.dart';
 import 'package:pemrograman_mobile/screens/home_screen.dart';
+import 'package:pemrograman_mobile/services/user_service.dart';
 
 // 1. Ubah menjadi StatefulWidget
 class LoginScreen extends StatefulWidget {
@@ -22,11 +23,14 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _handleLogin() {
+  void _handleLogin() async {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
 
-    if (username.isNotEmpty && password.isNotEmpty) {
+    bool isLoginSuccess = await UserService.login(username, password);
+
+    if (!mounted) return;
+    if (isLoginSuccess) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
