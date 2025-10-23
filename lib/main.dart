@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart';
+import 'package:pemrograman_mobile/screens/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,11 +11,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Expense Manager',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.grey[100],
       ),
-      home: const LoginScreen(),
+      home: const LoginScreen(), // Memulai aplikasi di LoginScreen
+      debugShowCheckedModeBanner: false,
     );
   }
 }
