@@ -4,7 +4,6 @@ import 'package:pemrograman_mobile/screens/register_screen.dart';
 import 'package:pemrograman_mobile/screens/home_screen.dart';
 import 'package:pemrograman_mobile/services/user_service.dart';
 
-// 1. Ubah menjadi StatefulWidget
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
