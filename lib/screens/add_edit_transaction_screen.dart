@@ -14,13 +14,13 @@ class AddEditTransactionScreen extends StatefulWidget {
 }
 
 class _AddEditTransactionScreenState extends State<AddEditTransactionScreen> {
-  final _formKey = GlobalKey<FormState>(); // Kunci untuk validasi form
+  final _formKey = GlobalKey<FormState>();
 
   late TextEditingController _nameController;
   late TextEditingController _amountController;
   TransactionType _selectedType = TransactionType.expense;
   DateTime _selectedDate = DateTime.now();
-  String _selectedCategory = 'Food'; // Kategori default
+  String _selectedCategory = 'Food';
 
   bool get _isEditing => widget.transaction != null;
 
